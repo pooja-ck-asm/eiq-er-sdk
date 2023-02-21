@@ -11,7 +11,7 @@ requests==2.28.1
 six==1.16.0
 urllib3==1.26.13
 virustotal-api==1.1.11
-websocket==0.2.1
+websockets
 websocket-client==1.4.2
 zope.event==4.5.0
 zope.interface==5.5.2
