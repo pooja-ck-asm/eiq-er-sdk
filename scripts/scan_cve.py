@@ -1,8 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-""" Script for scaning the CVE vulnerabilities from all installed applications .
-:copyright: (c) 2019 by PolyLogyx.
+""" 
+Script for scaning the vulnerabilities from installed applications .
+:copyright: (c) 2023 by EclecticIQ.
 :license: MIT, see LICENSE for more details.
+
+To run it:
+1. Install python and python required modules mentioned in requirements.txt
+2. Install go lang, install https://github.com/facebookincubator/nvdtools and make sure they are available
+3. Download the NVD feed with .json.gz format
+4. Run the script using the required command line arguments using installed python version
+
 """
 
 import argparse
@@ -88,8 +96,7 @@ class ScanCVE:
                 hosts_platform_dict[platform] = [host['host_identifier']]
         return hosts_platform_dict
 
-    @staticmethod
-    def get_installed_programs_csv(data):
+    def get_installed_programs_csv(self, data):
         filtered_list = []
         for result in data:
             vendor_word_list = result['vendor'].split(" ")
