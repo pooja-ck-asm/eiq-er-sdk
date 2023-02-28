@@ -57,23 +57,24 @@ class ScanCVE:
                 sql = self.sql_ubuntu
             elif platform == 'rhel':
                 sql = self.sql_rhel
-        results = self.er_api.query_live(sql=sql, host_identifiers=hosts_array)
-        csv_array_dict = {}
-        for host_identifier, data_node_dict in results.items():
-            csv_array_dict[host_identifier] = self.get_installed_programs_csv(data_node_dict['data'])
 
-        for host, csv_array in csv_array_dict.items():
-            vulnerable_found = False
-            for csv in csv_array:
-                command = self.command.format(csv, self.nvd_feed)
-                output = subprocess.getoutput(command)
-                if output:
-                    vulnerable_found = True
-                    part, vendor, product, version = csv.split(self.splitter)
-                    print(
-                        "Vulnerable found for the application '{0}' with version '{1}' in the host '{2}' with the CVE: {3}".format(product, version, host, output))
-            if not vulnerable_found:
-                print("No vulnerable found in the host: {}".format(host))
+            results = self.er_api.query_live(sql=sql, host_identifiers=hosts_array)
+            csv_array_dict = {}
+            for host_identifier, data_node_dict in results.items():
+                csv_array_dict[host_identifier] = self.get_installed_programs_csv(data_node_dict['data'])
+
+            for host, csv_array in csv_array_dict.items():
+                vulnerable_found = False
+                for csv in csv_array:
+                    command = self.command.format(csv, self.nvd_feed)
+                    output = subprocess.getoutput(command)
+                    if output:
+                        vulnerable_found = True
+                        part, vendor, product, version = csv.split(self.splitter)
+                        print(
+                            "Vulnerable found for the application '{0}' with version '{1}' in the host '{2}' with the CVE: {3}".format(product, version, host, output))
+                if not vulnerable_found:
+                    print("No vulnerable found in the host: {}".format(host))
 
     @staticmethod
     def get_platform_hosts_dict(all_hosts):
@@ -116,7 +117,7 @@ class ScanCVE:
                     product = item.lower()
                     break
             filtered_list.append(
-                self.splitter.join([result['part'], vendor, product, result['version']]))
+                self.splitter.join([result['part'], vendor.replace(',', ''), product.replace(',', ''), result['version']]))
         return filtered_list
 
 
